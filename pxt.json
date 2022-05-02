@@ -1,6 +1,6 @@
 {
-    "name": "d d",
-    "description": "",
+    "name": "rkSensor",
+    "description": "睿客传感器扩展",
     "dependencies": {
         "core": "*",
         "radio": "*",
@@ -14,6 +14,7 @@
     "testFiles": [
         "test.ts"
     ],
+    "public": true,
     "targetVersions": {
         "target": "4.0.18",
         "targetId": "microbit"
