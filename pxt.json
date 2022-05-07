@@ -10,7 +10,8 @@
     "files": [
         "main.blocks",
         "main.ts",
-        "README.md"
+        "README.md",
+        "mp3.ts"
     ],
     "testFiles": [
         "test.ts"
