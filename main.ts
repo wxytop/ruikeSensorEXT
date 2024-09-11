@@ -133,7 +133,7 @@ namespace rkSensorExt {
      * @param SDO SDO  eg: DigitalPin.P13 
      * @param SCL SCL  eg: DigitalPin.P14
      */
-    //% blockId=actuator_keyborad_pin block="actuator_keyborad_pin|SDOPIN %SDO|SCLPIN %SCL"   group="矩阵键盘模块"
+    //% blockId=actuator_keyborad_pin block="矩阵键盘模块|SDO引脚 %SDO|SCL引脚 %SCL"   group="矩阵键盘模块"
     //% weight=71
     //% subcategory="基础模块"
     export function actuator_keyborad_pin(SDO: DigitalPin, SCL: DigitalPin): void {
@@ -142,7 +142,7 @@ namespace rkSensorExt {
         _SCL = SCL
     }
 
-    //% blockId=actuator_keyborad_read block="actuator_keyborad_read"   group="矩阵键盘模块"
+    //% blockId=actuator_keyborad_read block="矩阵键盘读取相应值"   group="矩阵键盘模块"
     //% weight=70
     //% subcategory="基础模块"
     export function actuator_keyborad_read(): string {
