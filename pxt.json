@@ -10,8 +10,7 @@
         "main.blocks",
         "main.ts",
         "README.md",
-        "mp3.ts",
-        "_locales/zh/rkSensorExt-strings.json"
+        "mp3.ts"
     ],
     "testFiles": [
         "test.ts"
