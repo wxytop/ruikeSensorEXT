@@ -1,4 +1,4 @@
-//% color="#0f80ea" weight=10 icon="\ue3cf"
+//% color="#0f80ea" weight=10 icon="\ue642"
 namespace rkSensorExt {
     export enum playType {
         //% block="播放"
