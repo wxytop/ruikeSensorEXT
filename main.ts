@@ -1,7 +1,3 @@
-
-// 在此处添加您的代码
-// 在此处测试；当此软件包作为插件使用时，将不会编译此软件包。
-//% color="#0f80ea" weight=`10` icon="\uf1d1"
 namespace rkSensorExt {
     export enum playType {
         //% block="播放"
@@ -78,13 +74,13 @@ namespace rkSensorExt {
     //% blockId="MP3_volume_set"
     //% block="设置MP3音量|%vol"
     export function MP3_volume_set(vol: number): void {
-        let buffer = pins.createBuffer(5);
-        buffer.setNumber(NumberFormat.UInt8BE, 0, 0x7E)
-        buffer.setNumber(NumberFormat.UInt8BE, 1, 0x03)
-        buffer.setNumber(NumberFormat.UInt8BE, 2, 0x31)
-        buffer.setNumber(NumberFormat.UInt8BE, 3, <number>vol)
-        buffer.setNumber(NumberFormat.UInt8BE, 4, 0xEF)
-        serial.writeBuffer(buffer)
+        let buffer2 = pins.createBuffer(5);
+        buffer2.setNumber(NumberFormat.UInt8BE, 0, 0x7E)
+        buffer2.setNumber(NumberFormat.UInt8BE, 1, 0x03)
+        buffer2.setNumber(NumberFormat.UInt8BE, 2, 0x31)
+        buffer2.setNumber(NumberFormat.UInt8BE, 3, <number>vol)
+        buffer2.setNumber(NumberFormat.UInt8BE, 4, 0xEF)
+        serial.writeBuffer(buffer2)
     }
     //% weight=60
     //% num.min=1 num.max=65535
@@ -93,40 +89,96 @@ namespace rkSensorExt {
     //% block="MP3播放第 |%num首歌"
     export function MP3_assign_song(num: number): void {
         num = num < 1 ? 1 : (num > 65535 ? 65535 : num)
-        let buffer = pins.createBuffer(6);
+        let buffer3 = pins.createBuffer(6);
         let num_h = (num >> 8) & 0xFF
         let num_l = num & 0xFF
-        buffer.setNumber(NumberFormat.UInt8BE, 0, 0x7E)
-        buffer.setNumber(NumberFormat.UInt8BE, 1, 0x04)
-        buffer.setNumber(NumberFormat.UInt8BE, 2, 0x41)
-        buffer.setNumber(NumberFormat.UInt8BE, 3, num_h)
-        buffer.setNumber(NumberFormat.UInt8BE, 4, num_l)
-        buffer.setNumber(NumberFormat.UInt8BE, 5, 0xEF)
-        serial.writeBuffer(buffer)
+        buffer3.setNumber(NumberFormat.UInt8BE, 0, 0x7E)
+        buffer3.setNumber(NumberFormat.UInt8BE, 1, 0x04)
+        buffer3.setNumber(NumberFormat.UInt8BE, 2, 0x41)
+        buffer3.setNumber(NumberFormat.UInt8BE, 3, num_h)
+        buffer3.setNumber(NumberFormat.UInt8BE, 4, num_l)
+        buffer3.setNumber(NumberFormat.UInt8BE, 5, 0xEF)
+        serial.writeBuffer(buffer3)
     }
     //% blockId=rkSensorExt_MP3LoopMode block="设置MP3 循环模式为|%loopMode"
     //% weight=50
     //% blockGap=10
     export function MP3_loopMode(loopMode: playLoop): void {
-        let buffer = pins.createBuffer(5);
-        buffer.setNumber(NumberFormat.UInt8BE, 0, 0x7E)
-        buffer.setNumber(NumberFormat.UInt8BE, 1, 0x03)
-        buffer.setNumber(NumberFormat.UInt8BE, 2, 0x33)
-        buffer.setNumber(NumberFormat.UInt8BE, 3, loopMode)
-        buffer.setNumber(NumberFormat.UInt8BE, 4, 0xEF)
-        serial.writeBuffer(buffer)
+        let buffer4 = pins.createBuffer(5);
+        buffer4.setNumber(NumberFormat.UInt8BE, 0, 0x7E)
+        buffer4.setNumber(NumberFormat.UInt8BE, 1, 0x03)
+        buffer4.setNumber(NumberFormat.UInt8BE, 2, 0x33)
+        buffer4.setNumber(NumberFormat.UInt8BE, 3, loopMode)
+        buffer4.setNumber(NumberFormat.UInt8BE, 4, 0xEF)
+        serial.writeBuffer(buffer4)
     }
     //% weight=40
     //% blockGap=10
     //% blockId="MP3_eq_set"
     //% block="设置MP3播放音效%eq"
     export function MP3_eq_set(eq: equalizer): void {
-        let buffer = pins.createBuffer(5);
-        buffer.setNumber(NumberFormat.UInt8BE, 0, 0x7E)
-        buffer.setNumber(NumberFormat.UInt8BE, 1, 0x03)
-        buffer.setNumber(NumberFormat.UInt8BE, 2, 0x32)
-        buffer.setNumber(NumberFormat.UInt8BE, 3, eq)
-        buffer.setNumber(NumberFormat.UInt8BE, 4, 0xEF)
-        serial.writeBuffer(buffer)
+        let buffer5 = pins.createBuffer(5);
+        buffer5.setNumber(NumberFormat.UInt8BE, 0, 0x7E)
+        buffer5.setNumber(NumberFormat.UInt8BE, 1, 0x03)
+        buffer5.setNumber(NumberFormat.UInt8BE, 2, 0x32)
+        buffer5.setNumber(NumberFormat.UInt8BE, 3, eq)
+        buffer5.setNumber(NumberFormat.UInt8BE, 4, 0xEF)
+        serial.writeBuffer(buffer5)
     }
+
+    let _SDO = 0
+    let _SCL = 0
+    /**
+     * 
+     * @param SDO SDO  eg: DigitalPin.P13 
+     * @param SCL SCL  eg: DigitalPin.P14
+     */
+    //% blockId=actuator_keyborad_pin block="actuator_keyborad_pin|SDOPIN %SDO|SCLPIN %SCL"   group="矩阵键盘模块"
+    //% weight=71
+    //% subcategory="基础模块"
+    export function actuator_keyborad_pin(SDO: DigitalPin, SCL: DigitalPin): void {
+
+        _SDO = SDO
+        _SCL = SCL
+    }
+
+    //% blockId=actuator_keyborad_read block="actuator_keyborad_read"   group="矩阵键盘模块"
+    //% weight=70
+    //% subcategory="基础模块"
+    export function actuator_keyborad_read(): string {
+        let DATA = 0
+        pins.digitalWritePin(_SDO, 1)
+        control.waitMicros(93)
+
+        pins.digitalWritePin(_SDO, 0)
+        control.waitMicros(10)
+
+        for (let i = 0; i < 16; i++) {
+            pins.digitalWritePin(_SCL, 1)
+            pins.digitalWritePin(_SCL, 0)
+            DATA |= pins.digitalReadPin(_SDO) << i
+        }
+        control.waitMicros(2 * 1000)
+        // 	serial.writeString('' + DATA + '\n');
+        switch (DATA & 0xFFFF) {
+            case 0xFFFE: return "1"
+            case 0xFFFD: return "2"
+            case 0xFFFB: return "3"
+            case 0xFFEF: return "4"
+            case 0xFFDF: return "5"
+            case 0xFFBF: return "6"
+            case 0xFEFF: return "7"
+            case 0xFDFF: return "8"
+            case 0xFBFF: return "9"
+            case 0xDFFF: return "0"
+            case 0xFFF7: return "A"
+            case 0xFF7F: return "B"
+            case 0xF7FF: return "C"
+            case 0x7FFF: return "D"
+            case 0xEFFF: return "*"
+            case 0xBFFF: return "#"
+            default: return " "
+        }
+    }
+
 }
